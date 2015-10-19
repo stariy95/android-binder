@@ -13,10 +13,7 @@ import com.kendamasoft.binder.BindingContext;
 
 import java.util.List;
 
-/**
- * Created by stariy on 13.10.15.
- */
-public class ListViewAdapter<T, B extends ModelToViewBinder<T>> extends ArrayAdapter<T> {
+public class ListViewAdapter<T, B extends ViewHolderHelper<T>> extends ArrayAdapter<T> {
 
     static private final String TAG = ListViewAdapter.class.getSimpleName();
 
@@ -34,7 +31,7 @@ public class ListViewAdapter<T, B extends ModelToViewBinder<T>> extends ArrayAda
     @Override
     @SuppressWarnings("unchecked") // cast Object from getTag() to B type
     public View getView(int position, View convertView, ViewGroup parent) {
-        B holder = null;
+        B holder;
         View rowView = convertView;
         if(rowView != null) {
             holder = (B)convertView.getTag();

@@ -5,14 +5,11 @@ import android.view.View;
 
 import com.kendamasoft.binder.adapters.ViewAdapter;
 
-/**
- * Created by stariy on 13.10.15.
- */
-public abstract class ModelToViewBinder<T> implements ViewAdapter {
+public abstract class ViewHolderHelper<T> implements ViewAdapter {
 
     protected Context context;
 
-    public ModelToViewBinder() {
+    public ViewHolderHelper() {
 
     }
 
