@@ -11,7 +11,7 @@ class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.activity_test);
-        BindingContext.register(this);
+        Binder.register(this);
         
         test.setText("Hello World");
     }
@@ -55,7 +55,7 @@ class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.activity_test);
-        BindingContext.register(this);
+        Binder.register(this);
         
         model.setEnabled(false);
     }
@@ -96,7 +96,7 @@ class MyActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
         setContentView(R.layout.activity_test);
-        BindingContext.register(this);
+        Binder.register(this);
         
         ...
         
