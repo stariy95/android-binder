@@ -1,12 +1,9 @@
+plugins {
+    id "com.jfrog.bintray" version "1.4"
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
-//apply plugin: 'com.jfrog.bintray'
-
-// This is the library version used when deploying the artifact
-version = "0.9.0"
-group = 'com.kendamasoft'
-def gitUrl = 'https://github.com/stariy95/android-binder.git'   // Git repository URL
-def siteUrl = 'https://github.com/stariy95/android-binder'      // Homepage URL of the library
 
 android {
     compileSdkVersion 23
@@ -34,35 +31,64 @@ dependencies {
     //compile 'com.android.support:appcompat-v7:23.0.1'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def bintrayUser = properties.getProperty('bintray.user')
+def bintrayApiKey = properties.getProperty('bintray.key')
+def gitUrl = 'https://github.com/stariy95/android-binder.git'   // Git repository URL
+def siteUrl = 'https://github.com/stariy95/android-binder'      // Homepage URL of the library
+
+def currentVersion = '0.9.1'
+
+version = currentVersion
+group = 'com.kendamasoft'
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'android-binder'
+        userOrg = user
+        licenses = ['Apache-2.0']
+        vcsUrl = gitUrl
+        version {
+            name = currentVersion
+            desc = 'Android Binder Beta 0.9.0'
+        }
+    }
+}
+
+
 install {
     repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
+        pom.project {
+            name 'android-binder'
+            description 'Simple annotation based model to view binding library'
+            url siteUrl
+            inceptionYear '2015'
 
-                // Add your description here
-                name 'Simple annotation based model to view binding library.'
+            packaging 'aar'
+            groupId 'com.kendamasoft'
+            artifactId 'android-binder'
+            version currentVersion
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    distribution 'repo'
+                }
+            }
+            scm {
+                connection gitUrl
                 url siteUrl
 
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'stariy95'
-                        name 'Nikita Timofeev'
-                        email 'stariy@smtp.ru'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
+            }
+            developers {
+                developer {
+                    name 'kendamasoft.com'
                 }
             }
         }
