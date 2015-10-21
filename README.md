@@ -7,6 +7,9 @@ class MyActivity extends Activity {
     @Inject(R.id.textView)
     TextView text;
     
+    @Inject({R.id.icon1, R.id.icon2, R.id.icon3})
+    List<ImageView> icons;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 

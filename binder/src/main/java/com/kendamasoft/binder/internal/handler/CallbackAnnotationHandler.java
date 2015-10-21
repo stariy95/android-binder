@@ -25,7 +25,7 @@ public class CallbackAnnotationHandler implements AnnotationHandler<Callback> {
             throw new RuntimeException("Expected member of type Method for @Callback annotation, got " + member.getClass().getSimpleName());
         }
         final Method method = (Method)member;
-        final boolean hasViewParam = ReflectionUtils.isMethodHasParameter(method, View.class);
+        final boolean hasViewParam = ReflectionUtils.methodHasParameter(method, View.class);
 
         for(final View view : viewList) {
             ViewChangeListener listener = Binder.getListenerForView(view);
@@ -34,22 +34,14 @@ public class CallbackAnnotationHandler implements AnnotationHandler<Callback> {
                 callback = new ViewChangeListener.Callback() {
                     @Override
                     public void call(Object value) {
-                        try {
-                            method.invoke(object, view, value);
-                        } catch (Exception ex) {
-                            Log.e(TAG, "Unable to invoke callback method", ex);
-                        }
+                        ReflectionUtils.safeCallMethodWithoutResult(object, method, view, value);
                     }
                 };
             } else {
                 callback = new ViewChangeListener.Callback() {
                     @Override
                     public void call(Object value) {
-                        try {
-                            method.invoke(object, value);
-                        } catch (Exception ex) {
-                            Log.e(TAG, "Unable to invoke callback method", ex);
-                        }
+                        ReflectionUtils.safeCallMethodWithoutResult(object, method, value);
                     }
                 };
             }

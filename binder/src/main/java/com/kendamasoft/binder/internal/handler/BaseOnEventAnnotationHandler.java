@@ -32,7 +32,7 @@ public abstract class BaseOnEventAnnotationHandler<T extends Annotation, E> impl
     }
 
     protected E createListener(final Object object, final Method method) {
-        final boolean withParam = ReflectionUtils.isMethodHasParameter(method, View.class);
+        final boolean withParam = ReflectionUtils.methodHasParameter(method, View.class);
         if(withParam) {
             return createListenerWithParam(object, method);
         } else {

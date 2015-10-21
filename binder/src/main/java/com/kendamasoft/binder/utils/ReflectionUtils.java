@@ -6,14 +6,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 
-/**
- * Created by stariy on 16.10.15.
- */
 public class ReflectionUtils {
 
     static private final String TAG = ReflectionUtils.class.getSimpleName();
 
-    public static boolean isMethodHasParameter(Method method, Class parameterType) {
+    public static boolean methodHasParameter(Method method, Class parameterType) {
         Class<?>[] parameters = method.getParameterTypes();
         return parameters.length >= 1 && parameters[0].isAssignableFrom(parameterType);
     }
