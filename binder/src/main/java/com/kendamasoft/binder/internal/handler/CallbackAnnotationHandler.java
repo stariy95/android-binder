@@ -1,6 +1,5 @@
 package com.kendamasoft.binder.internal.handler;
 
-import android.util.Log;
 import android.view.View;
 
 import com.kendamasoft.binder.Binder;
