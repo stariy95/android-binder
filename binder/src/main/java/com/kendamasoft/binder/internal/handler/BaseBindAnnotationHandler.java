@@ -19,7 +19,7 @@ public abstract class BaseBindAnnotationHandler<T extends Annotation> implements
     public abstract int[] getViewIds(T annotation);
 
     @Override
-    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation) {
+    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable) {
         // check some invariants
         if(!(member instanceof Field)) {
             throw new RuntimeException("Expected member of type Field for @Bind annotation, got " + member.getClass().getSimpleName());
@@ -32,16 +32,21 @@ public abstract class BaseBindAnnotationHandler<T extends Annotation> implements
 
         BaseBinding fieldBinding = createBinding(object, field, annotation);
         fieldBinding.setView(viewList.get(0));
-        processObservable(object, field, fieldBinding);
+        processObservable(object, field, fieldBinding, observable);
         processSetter(object, field, fieldBinding);
         fieldBinding.notifyValueChanged();
     }
 
-    protected void processObservable(Object object, Field field, BaseBinding fieldBinding) {
-        if(!(object instanceof Observable)) {
+    protected void processObservable(Object object, Field field, BaseBinding fieldBinding, Observable observable) {
+        Observable foundObservable = null;
+        if(object instanceof Observable) {
+            foundObservable = (Observable)object;
+        } else if(observable != null) {
+            foundObservable = observable;
+        } else {
             return;
         }
-        ((Observable)object).addBinding(field.getName(), fieldBinding);
+        foundObservable.addBinding(field.getName(), fieldBinding);
     }
 
     protected void processSetter(Object object, Field field, BaseBinding fieldBinding) {

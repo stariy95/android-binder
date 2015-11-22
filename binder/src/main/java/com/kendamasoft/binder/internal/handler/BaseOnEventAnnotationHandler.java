@@ -2,6 +2,7 @@ package com.kendamasoft.binder.internal.handler;
 
 import android.view.View;
 
+import com.kendamasoft.binder.Observable;
 import com.kendamasoft.binder.utils.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -20,7 +21,7 @@ public abstract class BaseOnEventAnnotationHandler<T extends Annotation, E> impl
     public abstract int[] getViewIds(T annotation);
 
     @Override
-    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation) {
+    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable) {
         if(!(member instanceof Method)) {
             throw new RuntimeException("Expected member of type Method for @OnEvent annotation, got " + member.getClass().getSimpleName());
         }

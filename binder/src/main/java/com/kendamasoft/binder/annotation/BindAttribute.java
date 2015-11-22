@@ -13,9 +13,17 @@ import com.kendamasoft.binder.ViewAttribute;
  *     &#64;BindAttribute(id = R.id.icon, attr = ViewAttribute.ALPHA)
  *     float iconAlpha;
  *
+ *     &#64;BindAttribute(id = R.id.button, attr = ViewAttribute.ENABLED)
+ *     boolean buttonEnabled;
+ *
  *     void setIconAlpha(float alpha) {
  *         iconAlpha = alpha;
  *         notifyFieldChange("iconAlpha");
+ *     }
+ *
+ *     void setButtonEnabled(boolean enabled) {
+ *         buttonEnabled = enabled;
+ *         notifyFieldChange("buttonEnabled");
  *     }
  * }
  * </code>

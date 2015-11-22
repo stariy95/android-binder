@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.kendamasoft.binder.Binder;
+import com.kendamasoft.binder.Observable;
 import com.kendamasoft.binder.annotation.Model;
 
 import java.lang.reflect.AccessibleObject;
@@ -17,7 +18,7 @@ public class ModelAnnotationHandler implements AnnotationHandler<Model> {
     }
 
     @Override
-    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Model annotation) {
+    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Model annotation, Observable observable) {
         // check some invariants
         if(!(member instanceof Field)) {
             throw new RuntimeException("Expected member of type Field for @Bind annotation, got " + member.getClass().getSimpleName());

@@ -3,6 +3,7 @@ package com.kendamasoft.binder.internal.handler;
 import android.view.View;
 
 import com.kendamasoft.binder.Binder;
+import com.kendamasoft.binder.Observable;
 import com.kendamasoft.binder.internal.adapter.ViewChangeListener;
 import com.kendamasoft.binder.annotation.Callback;
 import com.kendamasoft.binder.utils.ReflectionUtils;
@@ -19,7 +20,7 @@ public class CallbackAnnotationHandler implements AnnotationHandler<Callback> {
     }
 
     @Override
-    public void handle(final Object object, AccessibleObject member, View topView, List<View> viewList, Callback annotation) {
+    public void handle(final Object object, AccessibleObject member, View topView, List<View> viewList, Callback annotation, Observable observable) {
         if(!(member instanceof Method)) {
             throw new RuntimeException("Expected member of type Method for @Callback annotation, got " + member.getClass().getSimpleName());
         }

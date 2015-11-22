@@ -3,6 +3,7 @@ package com.kendamasoft.binder.internal.handler;
 import android.util.Log;
 import android.view.View;
 
+import com.kendamasoft.binder.Observable;
 import com.kendamasoft.binder.annotation.Inject;
 
 import java.lang.reflect.AccessibleObject;
@@ -16,7 +17,7 @@ public class InjectAnnotationHandler implements AnnotationHandler<Inject> {
     }
 
     @Override
-    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Inject annotation) {
+    public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Inject annotation, Observable observable) {
         // check some invariants
         if(!(member instanceof Field)) {
             throw new RuntimeException("Expected member of type Field for @Inject annotation, got " + member.getClass().getSimpleName());

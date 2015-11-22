@@ -3,6 +3,7 @@ package com.kendamasoft.binder;
 import android.app.Activity;
 //import android.support.annotation.NonNull;
 //import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.kendamasoft.binder.internal.adapter.ViewChangeListener;
@@ -26,6 +27,7 @@ import com.kendamasoft.binder.internal.handler.OnClickAnnotationHandler;
 import com.kendamasoft.binder.internal.handler.OnFocusChangeAnnotationHandler;
 import com.kendamasoft.binder.internal.handler.OnLongClickAnnotationHandler;
 import com.kendamasoft.binder.internal.handler.OnTouchAnnotationHandler;
+import com.kendamasoft.binder.utils.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
@@ -124,21 +126,41 @@ public class Binder {
      * @param topView top level view we bind at
      */
     public static void register(Object object, View topView) {
+        if(object == null) {
+            throw new NullPointerException("Object is null");
+        }
+        if(topView == null) {
+            throw new NullPointerException("topView is null");
+        }
         Field[] fields = object.getClass().getDeclaredFields();
         Method[] methods = object.getClass().getDeclaredMethods();
         AccessibleObject[] members = new AccessibleObject[fields.length + methods.length];
         System.arraycopy(fields, 0, members, 0, fields.length);
         System.arraycopy(methods, 0, members, fields.length, methods.length);
 
-        for(AccessibleObject field : members) {
-            Annotation[] annotations = field.getAnnotations();
+        Observable externalObservable = null;
+        for(Field field : fields) {
+            if(field.getType().equals(Observable.class)) {
+                try {
+                    field.setAccessible(true);
+                    externalObservable = (Observable) field.get(object);
+                } catch (IllegalAccessException ex) {
+                    Log.d(TAG, "Unable to access Observable in field " + ReflectionUtils.formatMember(field), ex);
+                }
+                break;
+            }
+        }
+
+
+        for(AccessibleObject member : members) {
+            Annotation[] annotations = member.getAnnotations();
             for (Annotation annotation : annotations) {
                 AnnotationHandler<Annotation> handler = getHandler(annotation.annotationType());
                 if(handler == null) {
                     continue;
                 }
                 List<View> views = getViews(topView, handler.getViewIds(annotation), true);
-                handler.handle(object, field, topView, views, annotation);
+                handler.handle(object, member, topView, views, annotation, externalObservable);
             }
         }
     }
