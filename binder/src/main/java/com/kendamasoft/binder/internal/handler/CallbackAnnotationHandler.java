@@ -12,7 +12,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class CallbackAnnotationHandler implements AnnotationHandler<Callback> {
+public class CallbackAnnotationHandler extends AnnotationHandler<Callback> {
 
     @Override
     public int[] getViewIds(Callback annotation) {
@@ -21,9 +21,6 @@ public class CallbackAnnotationHandler implements AnnotationHandler<Callback> {
 
     @Override
     public void handle(final Object object, AccessibleObject member, View topView, List<View> viewList, Callback annotation, Observable observable) {
-        if(!(member instanceof Method)) {
-            throw new RuntimeException("Expected member of type Method for @Callback annotation, got " + member.getClass().getSimpleName());
-        }
         final Method method = (Method)member;
         final boolean hasViewParam = ReflectionUtils.methodHasParameter(method, View.class);
 

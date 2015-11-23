@@ -126,6 +126,23 @@ public class Binder {
      * @param topView top level view we bind at
      */
     public static void register(Object object, View topView) {
+        process(object, topView, false);
+    }
+
+
+    public static void unregister(Activity activity) {
+        unregister(activity, activity);
+    }
+
+    public static void unregister(Object object, Activity topView) {
+        unregister(object, topView.getWindow().getDecorView());
+    }
+
+    public static void unregister(Object object, View topView) {
+        process(object, topView, true);
+    }
+
+    private static void process(Object object, View topView, boolean unregister) {
         if(object == null) {
             throw new NullPointerException("Object is null");
         }
@@ -151,7 +168,6 @@ public class Binder {
             }
         }
 
-
         for(AccessibleObject member : members) {
             Annotation[] annotations = member.getAnnotations();
             for (Annotation annotation : annotations) {
@@ -160,7 +176,11 @@ public class Binder {
                     continue;
                 }
                 List<View> views = getViews(topView, handler.getViewIds(annotation), true);
-                handler.handle(object, member, topView, views, annotation, externalObservable);
+                if(unregister) {
+                    handler.cleanUp(object, member, topView, views, annotation, externalObservable);
+                } else {
+                    handler.handle(object, member, topView, views, annotation, externalObservable);
+                }
             }
         }
     }
@@ -172,6 +192,10 @@ public class Binder {
             listener = createListener(view);
         }
         return listener;
+    }
+
+    public static void clearListenerForView(View view) {
+        registeredListeners.remove(view.getId());
     }
 
     //@NonNull

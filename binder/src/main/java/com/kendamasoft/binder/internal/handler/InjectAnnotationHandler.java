@@ -10,7 +10,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class InjectAnnotationHandler implements AnnotationHandler<Inject> {
+public class InjectAnnotationHandler extends AnnotationHandler<Inject> {
     @Override
     public int[] getViewIds(Inject annotation) {
         return annotation.value();
@@ -18,10 +18,6 @@ public class InjectAnnotationHandler implements AnnotationHandler<Inject> {
 
     @Override
     public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Inject annotation, Observable observable) {
-        // check some invariants
-        if(!(member instanceof Field)) {
-            throw new RuntimeException("Expected member of type Field for @Inject annotation, got " + member.getClass().getSimpleName());
-        }
         Field field = (Field)member;
         if(viewList.size() == 0) {
             throw new RuntimeException("No ID parameters in @Inject annotation");
@@ -48,6 +44,18 @@ public class InjectAnnotationHandler implements AnnotationHandler<Inject> {
             } catch (Exception ex) {
                 Log.w(TAG, ex);
             }
+        }
+    }
+
+    @Override
+    public void cleanUp(Object object, AccessibleObject member, View topView, List<View> viewList, Inject annotation, Observable observable) {
+        super.cleanUp(object, member, topView, viewList, annotation, observable);
+        Field field = (Field)member;
+        field.setAccessible(true);
+        try {
+            field.set(object, null);
+        } catch (Exception ex) {
+            Log.w(TAG, ex);
         }
     }
 }

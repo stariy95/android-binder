@@ -31,6 +31,10 @@ public class Observable {
         fieldMap.put(fieldName, binding);
     }
 
+    public void clearBindings() {
+        fieldMap.clear();
+    }
+
     /**
      * Notify binder that field value has changed, so it can update bound view.
      * @param name of the field, must be the same as in java code.

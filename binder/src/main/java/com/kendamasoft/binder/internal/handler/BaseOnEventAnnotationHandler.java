@@ -3,6 +3,7 @@ package com.kendamasoft.binder.internal.handler;
 import android.view.View;
 
 import com.kendamasoft.binder.Observable;
+import com.kendamasoft.binder.annotation.OnClick;
 import com.kendamasoft.binder.utils.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
@@ -15,17 +16,13 @@ import java.util.List;
  * @param <T> type of annotation
  * @param <E> type of event listener
  */
-public abstract class BaseOnEventAnnotationHandler<T extends Annotation, E> implements AnnotationHandler<T> {
+public abstract class BaseOnEventAnnotationHandler<T extends Annotation, E> extends AnnotationHandler<T> {
 
     @Override
     public abstract int[] getViewIds(T annotation);
 
     @Override
     public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable) {
-        if(!(member instanceof Method)) {
-            throw new RuntimeException("Expected member of type Method for @OnEvent annotation, got " + member.getClass().getSimpleName());
-        }
-
         E listener = createListener(object, (Method) member);
         for(View view : viewList) {
             bindListenerToView(view, listener);
@@ -38,6 +35,14 @@ public abstract class BaseOnEventAnnotationHandler<T extends Annotation, E> impl
             return createListenerWithParam(object, method);
         } else {
             return createListenerWithoutParam(object, method);
+        }
+    }
+
+    @Override
+    public void cleanUp(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable) {
+        super.cleanUp(object, member, topView, viewList, annotation, observable);
+        for(View view : viewList) {
+            bindListenerToView(view, null);
         }
     }
 

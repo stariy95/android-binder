@@ -8,12 +8,14 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AccessibleObject;
 import java.util.List;
 
-public interface AnnotationHandler<T extends Annotation> {
+public abstract class AnnotationHandler<T extends Annotation> {
 
     String TAG = AnnotationHandler.class.getSimpleName();
 
-    int[] getViewIds(T annotation);
+    public abstract int[] getViewIds(T annotation);
 
-    void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable);
+    public abstract void handle(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable);
 
+    public void cleanUp(Object object, AccessibleObject member, View topView, List<View> viewList, T annotation, Observable observable) {
+    }
 }

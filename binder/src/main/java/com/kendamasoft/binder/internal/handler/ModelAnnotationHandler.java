@@ -11,7 +11,7 @@ import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class ModelAnnotationHandler implements AnnotationHandler<Model> {
+public class ModelAnnotationHandler extends AnnotationHandler<Model> {
     @Override
     public int[] getViewIds(Model annotation) {
         return new int[0];
@@ -19,14 +19,22 @@ public class ModelAnnotationHandler implements AnnotationHandler<Model> {
 
     @Override
     public void handle(Object object, AccessibleObject member, View topView, List<View> viewList, Model annotation, Observable observable) {
-        // check some invariants
-        if(!(member instanceof Field)) {
-            throw new RuntimeException("Expected member of type Field for @Bind annotation, got " + member.getClass().getSimpleName());
-        }
         Field field = (Field)member;
         field.setAccessible(true);
         try {
             Binder.register(field.get(object), topView);
+        } catch (IllegalAccessException ex) {
+            Log.w(TAG, ex);
+        }
+    }
+
+    @Override
+    public void cleanUp(Object object, AccessibleObject member, View topView, List<View> viewList, Model annotation, Observable observable) {
+        super.cleanUp(object, member, topView, viewList, annotation, observable);
+        Field field = (Field)member;
+        field.setAccessible(true);
+        try {
+            Binder.unregister(field.get(object), topView);
         } catch (IllegalAccessException ex) {
             Log.w(TAG, ex);
         }
