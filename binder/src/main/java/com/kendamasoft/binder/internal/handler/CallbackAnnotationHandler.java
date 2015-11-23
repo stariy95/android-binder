@@ -45,4 +45,12 @@ public class CallbackAnnotationHandler extends AnnotationHandler<Callback> {
             listener.addCallback(callback);
         }
     }
+
+    @Override
+    public void cleanUp(Object object, AccessibleObject member, View topView, List<View> viewList, Callback annotation, Observable observable) {
+        super.cleanUp(object, member, topView, viewList, annotation, observable);
+        for(final View view : viewList) {
+            Binder.clearListenerForView(view);
+        }
+    }
 }

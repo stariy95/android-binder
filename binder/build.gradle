@@ -5,7 +5,7 @@ plugins {
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-def currentVersion = '0.9.6'
+def currentVersion = '0.9.7' // don't forget versionCode below!
 
 android {
     compileSdkVersion 23
@@ -15,7 +15,7 @@ android {
     defaultConfig {
         minSdkVersion 11
         targetSdkVersion 23
-        versionCode 6
+        versionCode 7
         versionName currentVersion
     }
 
@@ -30,7 +30,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    //compile 'com.android.support:appcompat-v7:23.0.1'
+    //compile 'com.android.support:appcompat-v7:23.0.1' // shall we use annotations from there?
 }
 
 Properties properties = new Properties()

@@ -6,7 +6,7 @@ This project is a simple annotation based model to view binder.
 Add as a dependency to your ```build.gradle```:
 ```
 dependencies {
-    compile 'com.kendamasoft.binder:0.9.6'
+    compile 'com.kendamasoft.binder:0.9.7'
 }
 ```
 
@@ -26,6 +26,12 @@ class MyActivity extends Activity {
         Binder.register(this);
         
         test.setText("Hello World");
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Binder.unregister(this);
     }
 }
 ```
